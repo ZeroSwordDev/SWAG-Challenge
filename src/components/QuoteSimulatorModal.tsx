@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./QuoteSimulatorModal.css";
 import { useQuote } from "../context/Form";
-import { CompanyForm } from "../types/quote";
+import { CompanyForm } from "../types/Company";
 import { calculatePrice, formatPrice, getDiscount } from "../utils";
 
 export const QuoteSimulatorModal = ({}: {}) => {
