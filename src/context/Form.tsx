@@ -9,7 +9,7 @@ import {
 } from "react";
 import { Product } from "../types/Product";
 import { toast } from "react-toastify";
-import { CompanyForm } from "../types/quote";
+import { CompanyForm } from "../types/Company";
 
 interface QuoteContextType {
   setOpenQuote: (open: boolean) => void;
@@ -36,19 +36,24 @@ useEffect(() => {
 }, [openQuote]);
 
 
- const handleExport = (form: CompanyForm) => {
-    const summary = { ...form };
-    const blob = new Blob([JSON.stringify(summary, null, 2)], {
-      type: "application/json",
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `quote-simulado-${form.name || "company"}.json`;
-    a.click();
-    setOpenQuote(false);
-    toast.success("Cotización exportada como JSON");
+const handleExport = (form: CompanyForm) => {
+  const summary = {
+    ...form,
+    product,
+    quantity,
   };
+
+  const blob = new Blob([JSON.stringify(summary, null, 2)], {
+    type: "application/json",
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `quote-simulado-${form.name || "company"}.json`;
+  a.click();
+  setOpenQuote(false);
+  toast.success("Cotización exportada como JSON");
+};
   return (
     <QuoteContext.Provider
       value={{
@@ -68,6 +73,6 @@ useEffect(() => {
 
 export const useQuote = (): QuoteContextType => {
   const context = useContext(QuoteContext);
-  if (!context) throw new Error("useCart must be used inside CartProvider");
+  if (!context) throw new Error("useQuote must be used inside QuoteProvider");
   return context;
 };
