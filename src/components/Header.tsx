@@ -14,6 +14,12 @@ const Header = () => {
             <div className="logo-icon">
               <span className="material-icons">store</span>
             </div>
+            <div
+              className="logo-icon logo-cart"
+              onClick={() => setOpenCart(!openCart)}
+            >
+              <span className="material-icons">shop</span>
+            </div>
             <span className="logo-text p1-medium">SWAG Challenge</span>
           </Link>
 
@@ -28,7 +34,7 @@ const Header = () => {
               onClick={() => setOpenCart(!openCart)}
             >
               <span className="material-icons">shopping_cart</span>
-              Carrito ({cartItems.length })
+              Carrito ({cartItems.length})
             </button>
           </nav>
 

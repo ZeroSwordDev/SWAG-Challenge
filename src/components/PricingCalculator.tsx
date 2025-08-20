@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Product } from "../types/Product";
 import "./PricingCalculator.css";
 import { calculatePrice, formatPrice, getDiscount } from "../utils";
@@ -12,11 +12,19 @@ interface PricingCalculatorProps {
 const PricingCalculator = ({ product }: PricingCalculatorProps) => {
   const { addToCart } = useCart();
   const { setOpenQuote, setProduct } = useQuote();
+
   const [quantity, setQuantity] = useState<number>(1);
   const [selectedBreak, setSelectedBreak] = useState<number>(0);
 
-  const currentPrice = calculatePrice(quantity, product);
-  const discountPercent = getDiscount(quantity, product);
+  const [currentPrice, setCurrentPrice] = useState<number>(0);
+  const [discountPercent, setDiscountPercent] = useState<number>(0);
+
+  useEffect(() => {
+    if (product) {
+      setCurrentPrice(calculatePrice(quantity, product));
+      setDiscountPercent(getDiscount(quantity, product));
+    }
+  }, [quantity, product]);
 
   return (
     <div className="pricing-calculator">
@@ -48,7 +56,7 @@ const PricingCalculator = ({ product }: PricingCalculatorProps) => {
         </div>
 
         {/* Price Breaks */}
-        {product.priceBreaks && product.priceBreaks.length > 0 && (
+        {product?.priceBreaks && product?.priceBreaks.length > 0 && (
           <div className="price-breaks-section">
             <h4 className="breaks-title p1-medium">Descuentos por volumen</h4>
             <div className="price-breaks">
@@ -90,10 +98,13 @@ const PricingCalculator = ({ product }: PricingCalculatorProps) => {
           <div className="summary-row">
             <span className="summary-label p1">Precio unitario:</span>
             <span className="summary-value p1-medium">
-              {formatPrice(calculatePrice(quantity) / quantity)}
+              {formatPrice(currentPrice / quantity)}
             </span>
           </div>
-
+          <div className="summary-row">
+            <span className="summary-label p1">Stock:</span>
+            <span className="summary-value p1-medium">{product.stock} unidades</span>
+          </div>
           <div className="summary-row">
             <span className="summary-label p1">Cantidad:</span>
             <span className="summary-value p1-medium">{quantity} unidades</span>

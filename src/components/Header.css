@@ -85,6 +85,10 @@
   gap: 12px;
 }
 
+.logo-cart {
+    display: none;
+  }
+
 /* Responsive */
 @media (max-width: 768px) {
   .header-content {
@@ -102,10 +106,17 @@
   .logo-text {
     display: none;
   }
+
+  
 }
 
 @media (max-width: 480px) {
   .nav {
     display: none;
+  }
+  .logo-cart {
+    display: block;
+    text-align: center;
+     padding: 6px 6px;
   }
 }
