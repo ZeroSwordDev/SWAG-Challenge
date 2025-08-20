@@ -1,23 +1,28 @@
-import { categories, suppliers } from '../data/products'
-import './ProductFilters.css'
+import { categories, suppliers } from "../data/products";
+import "./ProductFilters.css";
 
 interface ProductFiltersProps {
-  selectedCategory: string
-  searchQuery: string
-  sortBy: string
-  onCategoryChange: (category: string) => void
-  onSearchChange: (search: string) => void
-  onSortChange: (sort: string) => void
+  selectedCategory: string;
+  selectedSupplier: string;
+  searchQuery: string;
+  sortBy: string;
+  onCategoryChange: (category: string) => void;
+  onSearchChange: (search: string) => void;
+  onSortChange: (sort: string) => void;
+  onSupplierChange: (supplier: string) => void;
 }
 
 const ProductFilters = ({
   selectedCategory,
+  selectedSupplier,
   searchQuery,
   sortBy,
   onCategoryChange,
   onSearchChange,
-  onSortChange
+  onSortChange,
+  onSupplierChange,
 }: ProductFiltersProps) => {
+
   return (
     <div className="product-filters">
       <div className="filters-card">
@@ -29,13 +34,14 @@ const ProductFilters = ({
               type="text"
               placeholder="Buscar productos, SKU..."
               value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
+              onChange={(e) => onSearchChange(e.target.value.toLowerCase())}
               className="search-input p1"
             />
+
             {searchQuery && (
-              <button 
+              <button
                 className="clear-search"
-                onClick={() => onSearchChange('')}
+                onClick={() => onSearchChange("")}
               >
                 <span className="material-icons">close</span>
               </button>
@@ -47,10 +53,12 @@ const ProductFilters = ({
         <div className="filter-section">
           <h3 className="filter-title p1-medium">Categorías</h3>
           <div className="category-filters">
-            {categories.map(category => (
+            {categories.map((category) => (
               <button
                 key={category.id}
-                className={`category-btn ${selectedCategory === category.id ? 'active' : ''}`}
+                className={`category-btn ${
+                  selectedCategory === category.id ? "active" : ""
+                }`}
                 onClick={() => onCategoryChange(category.id)}
               >
                 <span className="material-icons">{category.icon}</span>
@@ -64,13 +72,14 @@ const ProductFilters = ({
         {/* Sort Options */}
         <div className="filter-section">
           <h3 className="filter-title p1-medium">Ordenar por</h3>
-          <select 
-            value={sortBy} 
+          <select
+            value={sortBy}
             onChange={(e) => onSortChange(e.target.value)}
             className="sort-select p1"
           >
             <option value="name">Nombre A-Z</option>
-            <option value="price">Precio</option>
+            <option value="price-asc">Precio menor → mayor</option>
+            <option value="price-desc">Precio mayor → menor</option>
             <option value="stock">Stock disponible</option>
           </select>
         </div>
@@ -79,8 +88,10 @@ const ProductFilters = ({
         <div className="filter-section">
           <h3 className="filter-title p1-medium">Proveedores</h3>
           <div className="supplier-list">
-            {suppliers.map(supplier => (
-              <div key={supplier.id} className="supplier-item">
+            {suppliers.map((supplier) => (
+              <div key={supplier.id} className={`supplier-item  ${
+                  selectedSupplier === supplier.id ? "active" : ""
+                }`} onClick={() => onSupplierChange(supplier.id.toLowerCase())}>
                 <span className="supplier-name l1">{supplier.name}</span>
                 <span className="supplier-count l1">{supplier.products}</span>
               </div>
@@ -89,7 +100,7 @@ const ProductFilters = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProductFilters
+export default ProductFilters;

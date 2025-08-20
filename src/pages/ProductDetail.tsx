@@ -4,10 +4,14 @@ import { products } from '../data/products'
 import { Product } from '../types/Product'
 import PricingCalculator from '../components/PricingCalculator'
 import './ProductDetail.css'
+import { useCart } from '../context/Cart'
+import { useQuote } from '../context/Form'
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>()
-  const [product, setProduct] = useState<Product | null>(null)
+  const { addToCart } = useCart();
+  const {openQuote, setOpenQuote, setProduct} = useQuote();
+  const [product, setProducts] = useState<Product | null>(null)
   const [selectedColor, setSelectedColor] = useState<string>('')
   const [selectedSize, setSelectedSize] = useState<string>('')
   const [quantity, setQuantity] = useState<number>(1)
@@ -15,8 +19,8 @@ const ProductDetail = () => {
   useEffect(() => {
     if (id) {
       const foundProduct = products.find(p => p.id === parseInt(id))
-      setProduct(foundProduct || null)
-      
+      setProducts(foundProduct || null)
+      setProduct(product)
       // Set default selections
       if (foundProduct?.colors && foundProduct.colors.length > 0) {
         setSelectedColor(foundProduct.colors[0])
@@ -25,7 +29,7 @@ const ProductDetail = () => {
         setSelectedSize(foundProduct.sizes[0])
       }
     }
-  }, [id])
+  }, [id,product,setProduct])
 
   // Handle loading state
   if (!product) {
@@ -168,12 +172,16 @@ const ProductDetail = () => {
                   <input 
                     type="number" 
                     value={quantity} 
-                    onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value) || 1
+                      setQuantity(Math.max(1, Math.min(product?.stock || 1, value)))
+                    }}
                     className="quantity-input"
+                    max={product?.stock}
                     min="1"
                   />
                   <button 
-                    onClick={() => setQuantity(quantity + 1)}
+                    onClick={() => setQuantity(Math.max( product?.stock || quantity + 1))}
                     className="quantity-btn"
                   >
                     <span className="material-icons">add</span>
@@ -185,7 +193,8 @@ const ProductDetail = () => {
                 <button 
                   className={`btn btn-primary cta1 ${!canAddToCart ? 'disabled' : ''}`}
                   disabled={!canAddToCart}
-                  onClick={() => alert('Función de agregar al carrito por implementar')}
+                  onClick={() => {
+                    addToCart(product, quantity)}}
                 >
                   <span className="material-icons">shopping_cart</span>
                   {canAddToCart ? 'Agregar al carrito' : 'No disponible'}
@@ -193,7 +202,9 @@ const ProductDetail = () => {
                 
                 <button 
                   className="btn btn-secondary cta1"
-                  onClick={() => alert('Función de cotización por implementar')}
+                  onClick={() => {
+                    setProduct(product)
+                    setOpenQuote(!openQuote)}}
                 >
                   <span className="material-icons">calculate</span>
                   Solicitar cotización

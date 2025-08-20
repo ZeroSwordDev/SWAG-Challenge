@@ -1,7 +1,10 @@
-import { Link } from 'react-router-dom'
-import './Header.css'
+import { Link } from "react-router-dom";
+import "./Header.css";
+
+import { useCart } from "../context/Cart";
 
 const Header = () => {
+  const { cartItems, setOpenCart, openCart } = useCart();
   return (
     <header className="header">
       <div className="container">
@@ -20,9 +23,12 @@ const Header = () => {
               <span className="material-icons">home</span>
               Catálogo
             </Link>
-            <button className="nav-link l1" onClick={() => alert('Función de carrito por implementar')}>
+            <button
+              className="nav-link l1"
+              onClick={() => setOpenCart(!openCart)}
+            >
               <span className="material-icons">shopping_cart</span>
-              Carrito (0)
+              Carrito ({cartItems.length })
             </button>
           </nav>
 
@@ -36,7 +42,7 @@ const Header = () => {
         </div>
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

@@ -1,0 +1,117 @@
+/* Overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 40;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Modal */
+.modal {
+  background: #fff;
+  width: 500px;
+  max-width: 95%;
+  border-radius: 8px;
+  padding: 20px;
+  animation: slideDown 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Header */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 8px;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Body */
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal-body label {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.modal-body input,
+.modal-body textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+}
+
+.form-row div {
+  flex: 1;
+}
+
+.summary {
+  background: #f5f5f5;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.final-price {
+  font-size: 18px;
+  color: #0d6efd;
+  font-weight: bold;
+}
+
+/* Footer */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  border-top: 1px solid #ddd;
+  padding-top: 8px;
+}
+
+.btn {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn.cancel {
+  background: #ddd;
+}
+
+.btn.export {
+  background: #0d6efd;
+  color: white;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
