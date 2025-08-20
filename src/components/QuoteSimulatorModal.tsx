@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./QuoteSimulatorModal.css";
 import { useQuote } from "../context/Form";
 import { CompanyForm } from "../types/Company";
@@ -6,6 +6,8 @@ import { calculatePrice, formatPrice, getDiscount } from "../utils";
 
 export const QuoteSimulatorModal = ({}: {}) => {
   const { openQuote, setOpenQuote, product, handleExport } = useQuote();
+   const [currentPrice, setCurrentPrice] = useState<number>(0);
+  const [discountPercent, setDiscountPercent] = useState<number>(0);
 
   const [form, setForm] = useState<CompanyForm>({
     name: "",
@@ -24,11 +26,15 @@ export const QuoteSimulatorModal = ({}: {}) => {
       [name]: name === "quantity" ? Number(value) : value,
     }));
   };
+ 
+  useEffect(() => {
+    if (product) {
+      setCurrentPrice(calculatePrice(form.quantity!, product));
+      setDiscountPercent(getDiscount(form.quantity!, product));
+    }
+  }, [form.quantity!, product]);
 
-
-  const currentPrice = calculatePrice(form.quantity!, product!);
-  const discountPercent = getDiscount(form.quantity!, product!);
-
+  
   const onExport = () => {
     handleExport(form);
   };

@@ -181,7 +181,11 @@ const ProductDetail = () => {
                     min="1"
                   />
                   <button 
-                    onClick={() => setQuantity(Math.max( product?.stock || quantity + 1))}
+                   onClick={() =>
+                      setQuantity((prev) =>
+                        Math.min((product?.stock ?? Infinity), prev + 1)
+                      )
+                    }
                     className="quantity-btn"
                   >
                     <span className="material-icons">add</span>
